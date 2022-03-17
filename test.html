@@ -8,69 +8,122 @@
 </head>
 <body>
     <script>
-        class Queue {
-            // 属性
+        class PriorityQueue {
             constructor (items) {
                 this.items = []
             }
-            // 方法
             // enqueue
-            enqueue(element) {
-                this.items.push(element)
-            }
-            // dequeue
-            dequeue() {
-                return this.items.shift()
-            }
-            // front
-            front() {
-                return this.items[0]
-            }
-            // isEmpty
-            isEmpty() {
-                return this.items.length === 0
-            }
-            // size
-            size() {
-                return this.items.length
-            }
-            // toString
-            toString() {
-                let resultString = ''
-                for (let i = 0; i < this.items.length; i++) {
-                    resultString += this.items[i] + ' '
+            enqueue() {
+                // 创建 QueueElement 对象
+                let queueElement = new PriorityQueue.QueueElement()
+                // 如果队列为空
+                if (this.items.length === 0) {
+                    this.items.push(queueElement)
+                } else {
+                    let added = false
+                    for (let i = 0; i < this.items.length; i++) {
+                        if (queueElement.priority < this.items[i].priority) {
+                            this.items.splice(i, 0, queueElement)
+                            added = true
+                            break
+                        }
+                    }
+                    if (!added) {
+                        this.items.push(queueElement)
+                    }
                 }
-                return resultString
+            }
+        }
+        // 内部类，作为类的静态属性
+        PriorityQueue.QueueElement = class {
+            constructor (element, priority) {
+                this.element = element
+                this.priority = priority
+            }
+        }
+        let priorityQueue = new PriorityQueue()
+
+        // test
+        priorityQueue.enqueue('abc', 111)
+        priorityQueue.enqueue('ddd',10)
+        priorityQueue.enqueue('aaa',1000)
+        priorityQueue.enqueue('nds',50)
+        console.log(priorityQueue)
+
+        class Queue {
+            constructor() {
+                this.list = []
+            }
+            push(value) {
+                this.list.push(value)
+            }
+            pop() {
+                return this.list.shift()
+            }
+            peek() {
+                return this.list[0]
+            }
+            isEmpty() {
+                return this.list.length === 0
+            }
+            clear() {
+                this.list = []
+            }
+            size() {
+                return this.list.length
+            }
+            toString() {
+                return this.list.join(",")
             }
         }
 
-        const passGame = (namelist, num) => {
-            // 创建队列结构
-            let queue = new Queue()
-            // 将所有人依次加入到队列中
-            for (let i = 0; i < namelist.length; i++) {
-                queue.enqueue(namelist[i])
-            }
-            // 开始数数
-            while (queue.size() > 1) {
-                // 不是 num 重新加入队列
-                // 是 num dequeue移除队列
-                for (let i = 0; i < num - 1; i++) {
-                    queue.enqueue(queue.dequeue())
+        // 优先级队列
+        class PriorityQueue extends Queue {
+            push(value, priority = 0) {
+                let insertIndex = this.list.length;
+                for (let i = 0; i < this.list.length; i++) {
+                    if (priority <= this.list[i][1]) {
+                        insertIndex = i;
+                        break;
+                    }
                 }
-                // 删除 num
-                queue.dequeue()
+                this.list.splice(insertIndex, 0, [value, priority])
             }
-            console.log(queue.size())
-            // 获取剩下的人
-            const winner = queue.front()
-            console.log('the winner is ' + winner)
-            return namelist.indexOf(winner)
+            pop() {
+                let item = this.list.shift();
+                return item ? item[0] : undefined;
+            }
+            peek() {
+                let item = this.list[0];
+                return item ? item[0] : undefined;
+            }
+            toString() {
+                let resArr = [];
+                this.list.forEach((item) => {
+                    resArr.push(item[0])
+                })
+                return resArr.join(",")
+            }
         }
-        // test
-        const namelist = ['hidari', 'migi', 'april', 'shmily', 'sherlock']
-        const num = 3
-        passGame(namelist, num)
+
+
+        // 测试代码
+        const queue = new PriorityQueue();
+        queue.push("C", 3)
+        queue.push("B", 2)
+        queue.push("A", 1)
+        queue.push("BB", 2)
+        queue.pop();
+        queue.push("D", 5)
+        console.log(queue.toString())
+        console.log(queue.peek())
+        console.log(queue.size())
+        console.log(queue.isEmpty())
+        queue.clear();
+        console.log(queue.pop())
+        console.log(queue.peek())
+        console.log(queue.toString())
+        console.log(queue.isEmpty())
     </script>
 </body>
 </html>
