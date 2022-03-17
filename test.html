@@ -8,143 +8,69 @@
 </head>
 <body>
     <script>
-        class Stack {
-    // 栈中的属性
-    constructor (items) {
-        this.items = []
-    }
-    // 栈的相关操作
-    // push()
-    push(element) {
-        this.items.push(element)
-    }
-    // pop()
-    pop() {
-        return this.items.pop()
-    }
-    // peek()
-    peek() {
-        // 返回栈顶元素
-        return this.items[this.items.length - 1]
-    }
-    // isEmpty()
-    isEmpty() {
-        return this.items.length === 0
-    }
-    // size()
-    size() {
-        return this.items.length
-    }
-    // toString()
-    toString() {
-        let resultString = ''
-        for (let i = 0; i < this.items.length; i++) {
-            resultString += this.items[i] + ' '
-        }
-        return resultString
-    }
-}
-// 栈的使用
-let stack = new Stack()
-
-
-let calculate = (numString) => {
-    // 数字栈
-    let numStack = new Stack()
-    // 操作符栈
-    let operationStack = new Stack()
-    // 将字符串分割成数组
-    let tokens = insertBlank(numString).split(' ')
-    console.log('token is ' + tokens)
-    // for in 遍历数组
-    for (let i in tokens) {
-        // 如果输入数字操作符时有空格，消除空格
-        if (tokens[i] === '') {
-            continue
-        }
-        // 加减操作
-        else if (tokens[i].charAt(0) === '+' || tokens[i].charAt(0) === '-') {
-            // 处理所有的操作符
-            while (!operationStack.isEmpty() && (
-                operationStack.peek() === "+" || operationStack.peek() === "-" || operationStack.peek() === "*" || operationStack.peek() === "/"
-            )) {
-                // 操作符栈中有东西先处理
-                processAnOperator(numStack, operationStack)
+        class Queue {
+            // 属性
+            constructor (items) {
+                this.items = []
             }
-            // 将当前操作符 push 进栈
-            operationStack.push(tokens[i].charAt(0))
-        }
-        // 乘除操作
-        else if(tokens[i].charAt(0) === '*' || tokens[i].charAt(0) === '/') {
-            while(!operationStack.isEmpty() && (operationStack.peek() === '*' || operationStack.peek() === '/')) {
-                //如果遇到乘除操作符进行处理
-                processAnOperator(numStack,operationStack)
+            // 方法
+            // enqueue
+            enqueue(element) {
+                this.items.push(element)
             }
-            operationStack.push(tokens[i].charAt(0))
-        }
-        // 左括号入栈
-        else if (tokens[i].trim().charAt(0) === '(') {
-            operationStack.push('(')
-        }
-        // 遇到右括号移出左括号
-        else if (tokens[i].trim().charAt(0) === ')') {
-            while (operationStack.peek() !== '(') {
-                // 处理操作符直到遇到 (
-                processAnOperator(numStack, operationStack)
+            // dequeue
+            dequeue() {
+                return this.items.shift()
             }
-            // 将 ( 移出栈
-            operationStack.pop()
+            // front
+            front() {
+                return this.items[0]
+            }
+            // isEmpty
+            isEmpty() {
+                return this.items.length === 0
+            }
+            // size
+            size() {
+                return this.items.length
+            }
+            // toString
+            toString() {
+                let resultString = ''
+                for (let i = 0; i < this.items.length; i++) {
+                    resultString += this.items[i] + ' '
+                }
+                return resultString
+            }
         }
-        // 遇到的是数字，移入数字栈
-        else {
-            // 将需要计算的数放到数字栈中
-            numStack.push(parseFloat(tokens[i]))
+
+        const passGame = (namelist, num) => {
+            // 创建队列结构
+            let queue = new Queue()
+            // 将所有人依次加入到队列中
+            for (let i = 0; i < namelist.length; i++) {
+                queue.enqueue(namelist[i])
+            }
+            // 开始数数
+            while (queue.size() > 1) {
+                // 不是 num 重新加入队列
+                // 是 num dequeue移除队列
+                for (let i = 0; i < num - 1; i++) {
+                    queue.enqueue(queue.dequeue())
+                }
+                // 删除 num
+                queue.dequeue()
+            }
+            console.log(queue.size())
+            // 获取剩下的人
+            const winner = queue.front()
+            console.log('the winner is ' + winner)
+            return namelist.indexOf(winner)
         }
-    }
-    // 如果操作符栈中还有操作符，继续计算
-    while(!operationStack.isEmpty()) {
-        processAnOperator(numStack, operationStack)
-    }
-    return numStack.pop()
-}
-
-// 处理操作符
-let processAnOperator = (numStack, operationStack) => {
-    let op = operationStack.pop()
-    let num1 = numStack.pop()
-    let num2 = numStack.pop()
-    if (op === '-') {
-        numStack.push(num2 - num1);
-    }
-    else if (op === '+') {
-        numStack.push(num2 + num1);
-    }
-    else if (op === '*') {
-        numStack.push(num2 * num1)
-    }
-    else {
-        numStack.push(num2 / num1);
-    }
-}
-
-// 分割字符串，以便后续分割字符串为数组
-
-let insertBlank = (numString) => {
-    let blankString = ''
-    for (let i = 0; i < numString.length; i++) {
-        let indexOfI = numString[i]
-        if (indexOfI === '+' || indexOfI === '-' || indexOfI === '*' || indexOfI === '/' || indexOfI ==='(' || indexOfI === ')') {
-            blankString += ' ' + numString.charAt(i) + ' '
-        } else {
-            blankString += numString.charAt(i)
-        }
-    }
-    return blankString
-}
-
-let test6 = '2.3+23/12+(3.1459*0.24)'
-let resr = calculate(test6)
-console.log("result is " + resr)
+        // test
+        const namelist = ['hidari', 'migi', 'april', 'shmily', 'sherlock']
+        const num = 3
+        passGame(namelist, num)
     </script>
 </body>
 </html>
