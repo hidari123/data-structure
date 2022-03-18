@@ -8,122 +8,193 @@
 </head>
 <body>
     <script>
-        class PriorityQueue {
-            constructor (items) {
-                this.items = []
-            }
-            // enqueue
-            enqueue() {
-                // 创建 QueueElement 对象
-                let queueElement = new PriorityQueue.QueueElement()
-                // 如果队列为空
-                if (this.items.length === 0) {
-                    this.items.push(queueElement)
-                } else {
-                    let added = false
-                    for (let i = 0; i < this.items.length; i++) {
-                        if (queueElement.priority < this.items[i].priority) {
-                            this.items.splice(i, 0, queueElement)
-                            added = true
-                            break
-                        }
-                    }
-                    if (!added) {
-                        this.items.push(queueElement)
-                    }
-                }
-            }
-        }
-        // 内部类，作为类的静态属性
-        PriorityQueue.QueueElement = class {
-            constructor (element, priority) {
-                this.element = element
-                this.priority = priority
-            }
-        }
-        let priorityQueue = new PriorityQueue()
+        // class PriorityQueue {
+        //     constructor (items) {
+        //         this.items = []
+        //     }
+        //     // enqueue
+        //     enqueue() {
+        //         // 创建 QueueElement 对象
+        //         let queueElement = new PriorityQueue.QueueElement()
+        //         // 如果队列为空
+        //         if (this.items.length === 0) {
+        //             this.items.push(queueElement)
+        //         } else {
+        //             let added = false
+        //             for (let i = 0; i < this.items.length; i++) {
+        //                 if (queueElement.priority < this.items[i].priority) {
+        //                     this.items.splice(i, 0, queueElement)
+        //                     added = true
+        //                     break
+        //                 }
+        //             }
+        //             if (!added) {
+        //                 this.items.push(queueElement)
+        //             }
+        //         }
+        //     }
+        // }
+        // // 内部类，作为类的静态属性
+        // PriorityQueue.QueueElement = class {
+        //     constructor (element, priority) {
+        //         this.element = element
+        //         this.priority = priority
+        //     }
+        // }
+        // let priorityQueue = new PriorityQueue()
 
-        // test
-        priorityQueue.enqueue('abc', 111)
-        priorityQueue.enqueue('ddd',10)
-        priorityQueue.enqueue('aaa',1000)
-        priorityQueue.enqueue('nds',50)
-        console.log(priorityQueue)
+        // // test
+        // priorityQueue.enqueue('abc', 111)
+        // priorityQueue.enqueue('ddd',10)
+        // priorityQueue.enqueue('aaa',1000)
+        // priorityQueue.enqueue('nds',50)
+        // console.log(priorityQueue)
+
+        // class Queue {
+        //     constructor() {
+        //         this.list = []
+        //     }
+        //     push(value) {
+        //         this.list.push(value)
+        //     }
+        //     pop() {
+        //         return this.list.shift()
+        //     }
+        //     peek() {
+        //         return this.list[0]
+        //     }
+        //     isEmpty() {
+        //         return this.list.length === 0
+        //     }
+        //     clear() {
+        //         this.list = []
+        //     }
+        //     size() {
+        //         return this.list.length
+        //     }
+        //     toString() {
+        //         return this.list.join(",")
+        //     }
+        // }
+
+        // // 优先级队列
+        // class PriorityQueue extends Queue {
+        //     push(value, priority = 0) {
+        //         let insertIndex = this.list.length;
+        //         for (let i = 0; i < this.list.length; i++) {
+        //             if (priority <= this.list[i][1]) {
+        //                 insertIndex = i;
+        //                 break;
+        //             }
+        //         }
+        //         this.list.splice(insertIndex, 0, [value, priority])
+        //     }
+        //     pop() {
+        //         let item = this.list.shift();
+        //         return item ? item[0] : undefined;
+        //     }
+        //     peek() {
+        //         let item = this.list[0];
+        //         return item ? item[0] : undefined;
+        //     }
+        //     toString() {
+        //         let resArr = [];
+        //         this.list.forEach((item) => {
+        //             resArr.push(item[0])
+        //         })
+        //         return resArr.join(",")
+        //     }
+        // }
+
+
+        // // 测试代码
+        // const queue = new PriorityQueue();
+        // queue.push("C", 3)
+        // queue.push("B", 2)
+        // queue.push("A", 1)
+        // queue.push("BB", 2)
+        // queue.pop();
+        // queue.push("D", 5)
+        // console.log(queue.toString())
+        // console.log(queue.peek())
+        // console.log(queue.size())
+        // console.log(queue.isEmpty())
+        // queue.clear();
+        // console.log(queue.pop())
+        // console.log(queue.peek())
+        // console.log(queue.toString())
+        // console.log(queue.isEmpty())
 
         class Queue {
-            constructor() {
-                this.list = []
-            }
-            push(value) {
-                this.list.push(value)
-            }
-            pop() {
-                return this.list.shift()
-            }
-            peek() {
-                return this.list[0]
-            }
-            isEmpty() {
-                return this.list.length === 0
-            }
-            clear() {
-                this.list = []
-            }
-            size() {
-                return this.list.length
-            }
-            toString() {
-                return this.list.join(",")
+    // 属性
+    constructor (items) {
+        this.items = []
+    }
+    // 方法
+    // enqueue
+    enqueue(element) {
+        this.items.push(element)
+    }
+    // dequeue
+    dequeue() {
+        return this.items.shift()
+    }
+    // front
+    front() {
+        return this.items[0]
+    }
+    // isEmpty
+    isEmpty() {
+        return this.items.length === 0
+    }
+    // size
+    size() {
+        return this.items.length
+    }
+    // toString
+    toString() {
+        let resultString = ''
+        for (let i = 0; i < this.items.length; i++) {
+            resultString += this.items[i] + ' '
+        }
+        return resultString
+    }
+}
+
+class PriorityQueue extends Queue{
+    enqueue(element, priority = 0) {
+        let insertIndex = this.items.length
+        for (let i = 0; i < insertIndex; i++) {
+            if (priority <= this.items[i][1]) {
+                insertIndex = i
+                break
             }
         }
-
-        // 优先级队列
-        class PriorityQueue extends Queue {
-            push(value, priority = 0) {
-                let insertIndex = this.list.length;
-                for (let i = 0; i < this.list.length; i++) {
-                    if (priority <= this.list[i][1]) {
-                        insertIndex = i;
-                        break;
-                    }
-                }
-                this.list.splice(insertIndex, 0, [value, priority])
-            }
-            pop() {
-                let item = this.list.shift();
-                return item ? item[0] : undefined;
-            }
-            peek() {
-                let item = this.list[0];
-                return item ? item[0] : undefined;
-            }
-            toString() {
-                let resArr = [];
-                this.list.forEach((item) => {
-                    resArr.push(item[0])
-                })
-                return resArr.join(",")
-            }
-        }
-
-
-        // 测试代码
-        const queue = new PriorityQueue();
-        queue.push("C", 3)
-        queue.push("B", 2)
-        queue.push("A", 1)
-        queue.push("BB", 2)
-        queue.pop();
-        queue.push("D", 5)
-        console.log(queue.toString())
-        console.log(queue.peek())
-        console.log(queue.size())
-        console.log(queue.isEmpty())
-        queue.clear();
-        console.log(queue.pop())
-        console.log(queue.peek())
-        console.log(queue.toString())
-        console.log(queue.isEmpty())
+        this.items.splice(insertIndex, 0, [element, priority])
+    }
+    dequeue() {
+        let item = this.items.shift()
+        return item ? item[0] : undefined
+    }
+    front() {
+        let item = this.items[0]
+        return item ? item[0] : undefined
+    }
+    isEmpty() {
+        return this.items.length === 0
+    }
+    size() {
+        return this.items.length
+    }
+    toString() {
+        let resArr = []
+        this.items.forEach((item) => {
+            res.push(item[0])
+        })
+        return resArr.join(' ')
+    }
+}
+let priorityQueue = new PriorityQueue()
     </script>
 </body>
 </html>

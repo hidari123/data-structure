@@ -10,22 +10,37 @@
 1. 封装元素和优先级放在一起，可以封装一个新的构造函数
 2. 添加元素时，将新插入元素的优先级和队列中已经存在的优先级进行比较，以获得正确的位置
 ```js
-class PriorityQueue {
-    constructor (items) {
-        this.items = []
+class PriorityQueue extends Queue{
+    enqueue(element, priority = 0) {
+        let insertIndex = this.items.length
+        for (let i = 0; i < insertIndex; i++) {
+            if (priority <= this.items[i][1]) {
+                insertIndex = i
+                break
+            }
+        }
+        this.items.splice(insertIndex, 0, [element, priority])
     }
-    // enqueue
-    enqueue() {
-        // 创建 QueueElement 对象
-        let queueElement = new QueueElement(element, priority)
-        if ()
+    dequeue() {
+        let item = this.items.shift()
+        return item ? item[0] : undefined
     }
-}
-// 内部类，作为类的静态属性
-PriorityQueue.QueueElement = class {
-    constructor (element, priority) {
-        this.element = element
-        this.priority = priority
+    front() {
+        let item = this.items[0]
+        return item ? item[0] : undefined
+    }
+    isEmpty() {
+        return this.items.length === 0
+    }
+    size() {
+        return this.items.length
+    }
+    toString() {
+        let resArr = []
+        this.items.forEach((item) => {
+            res.push(item[0])
+        })
+        return resArr.join(' ')
     }
 }
 let priorityQueue = new PriorityQueue()
