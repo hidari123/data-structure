@@ -8,193 +8,165 @@
 </head>
 <body>
     <script>
-        // class PriorityQueue {
-        //     constructor (items) {
-        //         this.items = []
-        //     }
-        //     // enqueue
-        //     enqueue() {
-        //         // 创建 QueueElement 对象
-        //         let queueElement = new PriorityQueue.QueueElement()
-        //         // 如果队列为空
-        //         if (this.items.length === 0) {
-        //             this.items.push(queueElement)
-        //         } else {
-        //             let added = false
-        //             for (let i = 0; i < this.items.length; i++) {
-        //                 if (queueElement.priority < this.items[i].priority) {
-        //                     this.items.splice(i, 0, queueElement)
-        //                     added = true
-        //                     break
-        //                 }
-        //             }
-        //             if (!added) {
-        //                 this.items.push(queueElement)
-        //             }
-        //         }
-        //     }
-        // }
-        // // 内部类，作为类的静态属性
-        // PriorityQueue.QueueElement = class {
-        //     constructor (element, priority) {
-        //         this.element = element
-        //         this.priority = priority
-        //     }
-        // }
-        // let priorityQueue = new PriorityQueue()
-
-        // // test
-        // priorityQueue.enqueue('abc', 111)
-        // priorityQueue.enqueue('ddd',10)
-        // priorityQueue.enqueue('aaa',1000)
-        // priorityQueue.enqueue('nds',50)
-        // console.log(priorityQueue)
-
-        // class Queue {
-        //     constructor() {
-        //         this.list = []
-        //     }
-        //     push(value) {
-        //         this.list.push(value)
-        //     }
-        //     pop() {
-        //         return this.list.shift()
-        //     }
-        //     peek() {
-        //         return this.list[0]
-        //     }
-        //     isEmpty() {
-        //         return this.list.length === 0
-        //     }
-        //     clear() {
-        //         this.list = []
-        //     }
-        //     size() {
-        //         return this.list.length
-        //     }
-        //     toString() {
-        //         return this.list.join(",")
-        //     }
-        // }
-
-        // // 优先级队列
-        // class PriorityQueue extends Queue {
-        //     push(value, priority = 0) {
-        //         let insertIndex = this.list.length;
-        //         for (let i = 0; i < this.list.length; i++) {
-        //             if (priority <= this.list[i][1]) {
-        //                 insertIndex = i;
-        //                 break;
-        //             }
-        //         }
-        //         this.list.splice(insertIndex, 0, [value, priority])
-        //     }
-        //     pop() {
-        //         let item = this.list.shift();
-        //         return item ? item[0] : undefined;
-        //     }
-        //     peek() {
-        //         let item = this.list[0];
-        //         return item ? item[0] : undefined;
-        //     }
-        //     toString() {
-        //         let resArr = [];
-        //         this.list.forEach((item) => {
-        //             resArr.push(item[0])
-        //         })
-        //         return resArr.join(",")
-        //     }
-        // }
-
-
-        // // 测试代码
-        // const queue = new PriorityQueue();
-        // queue.push("C", 3)
-        // queue.push("B", 2)
-        // queue.push("A", 1)
-        // queue.push("BB", 2)
-        // queue.pop();
-        // queue.push("D", 5)
-        // console.log(queue.toString())
-        // console.log(queue.peek())
-        // console.log(queue.size())
-        // console.log(queue.isEmpty())
-        // queue.clear();
-        // console.log(queue.pop())
-        // console.log(queue.peek())
-        // console.log(queue.toString())
-        // console.log(queue.isEmpty())
-
-        class Queue {
-    // 属性
-    constructor (items) {
-        this.items = []
-    }
-    // 方法
-    // enqueue
-    enqueue(element) {
-        this.items.push(element)
-    }
-    // dequeue
-    dequeue() {
-        return this.items.shift()
-    }
-    // front
-    front() {
-        return this.items[0]
-    }
-    // isEmpty
-    isEmpty() {
-        return this.items.length === 0
-    }
-    // size
-    size() {
-        return this.items.length
-    }
-    // toString
-    toString() {
-        let resultString = ''
-        for (let i = 0; i < this.items.length; i++) {
-            resultString += this.items[i] + ' '
-        }
-        return resultString
-    }
-}
-
-class PriorityQueue extends Queue{
-    enqueue(element, priority = 0) {
-        let insertIndex = this.items.length
-        for (let i = 0; i < insertIndex; i++) {
-            if (priority <= this.items[i][1]) {
-                insertIndex = i
-                break
+        // 创建Node节点类
+        class Node {
+            constructor(element) {
+                this.element = element
+                this.next = null
             }
         }
-        this.items.splice(insertIndex, 0, [element, priority])
-    }
-    dequeue() {
-        let item = this.items.shift()
-        return item ? item[0] : undefined
-    }
-    front() {
-        let item = this.items[0]
-        return item ? item[0] : undefined
-    }
-    isEmpty() {
-        return this.items.length === 0
-    }
-    size() {
-        return this.items.length
-    }
-    toString() {
-        let resArr = []
-        this.items.forEach((item) => {
-            res.push(item[0])
-        })
-        return resArr.join(' ')
-    }
-}
-let priorityQueue = new PriorityQueue()
+        // 封装链表类
+        class LinkedList {
+            // 属性
+            constructor() {
+                this.head = null // 默认指向空
+                this.length = 0 // 初始长度为0
+            }
+
+            append(element) {
+                // 创建新的节点
+                let node = new Node(element)
+                // 判断是否添加的是第一个元素
+                if(this.length === 0) {
+                    this.head = node
+                    node.next = null // 可以不写
+                } else {
+                    // 找到最后一个节点
+                    let current = this.head // current 指向 head 的 next指针 指向的第一个节点
+                    while (current.next) { // next指针 不为空的时候
+                        current = current.next // 让 current的 next指针 指向 下一个节点，直到 current 为空
+                        node.next = null //也可以不写
+                    }
+                    // 最后节点的 next 指向新节点 node
+                    current.next = node
+                }
+                // 链表长度 +1
+                this.length++
+            }
+
+            toString() {
+                // 定义变量
+                let current = this.head
+                let listString = ''
+                // 循环获取节点
+                while (current) {
+                    listString += current.element + ' '
+                    current = current.next
+                }
+                return listString
+            }
+
+            insert(position, element) {
+                // 对 position 越界判断
+                if (position < 0 || position > this.length) return false
+                // 创建节点
+                let node = new Node(element)
+                // 插入 position = 0 的位置
+                if (position === 0) {
+                    node.next = this.head // 此时 this.head 指向的是原先的第一个节点 让插入节点的 next指针 指向原先的第一个节点
+                    this.head = node // 将 head 的 next指针 指向 node
+                } else {
+                    let index = 0
+                    let current = this.head // current 是第一个节点
+                    let previous = null // current 是第一个节点的时候，前一个是 null
+                    while (index++ < position) { // 先判断 index 是否小于 position 再++
+                        previous = current // 此时 current 指向的是 position 把此时的 position 赋值给前一个节点 previous
+                        current = current.next // 找到需要插入的位置的当前节点，current 指向的是 position 的后一个位置
+                    }
+                    node.next = current // 插入的节点的 next指针 指向这个位置原先的节点
+                    previous.next = node // 前一个节点 next指针 指向插入的节点
+                }
+            }
+
+            get(position) {
+                // 越界判断
+                if (position < 0 || position >= this.length) return false
+                // 获取对应的 element
+                let current = this.head
+                let index = 0
+                while (index++ < position) {
+                    current = current.next
+                }
+                return current.element
+            }
+
+            indexOf(element) {
+                let current = this.head
+                let index = 0
+                while (current) {
+                    if (current.element === element) return index
+                    current = current.next
+                    index++
+                }
+                // 没有找到
+                return -1
+            }
+
+            update(position, element) {
+                // 越界判断
+                if (position < 0 || position >= this.length) return false
+                let current = this.head
+                let index = 0
+                while (index++ < position) {
+                    current = current.next
+                }
+                current.element = element
+                return true
+            }
+
+            removeAt(position) {
+                if (position < 0 || position >= this.length) return false
+                let current = this.head
+                // 判断删除的是否是第一个节点
+                if (position === 0) {
+                    // 原来的 this.head 指向要被删除的节点 现在指向被删除的下一个节点
+                    this.head = this.head.next // 被删除节点也指向 this.head.next 不用管 没有指针指向被删除节点 浏览器自动清除没有被引用的数据
+                } else {
+                    let index = 0
+                    let previous = null
+                    if (index++ < position) {
+                        previous = current
+                        current = current.next
+                    }
+                    previous.next = current.next
+                }
+                // 链表长度 -1
+                this.length--
+                return true
+            }
+
+            remove(element) {
+                // 获取 element 在链表中的位置
+                let position = this.indexOf(element)
+                // 根据位置信息删除节点
+                if (position < 0) return false
+                return this.removeAt(position)
+            }
+
+            isEmpty() {
+                return this.length === 0
+            }
+
+            size() {
+                return this.length
+            }
+        }
+
+        // test
+        let list = new LinkedList()
+        list.append('123')
+        list.append('456')
+        list.append('789')
+        list.removeAt(1)
+        list.append('abc')
+        list.remove('123')
+        list.update(0,'2')
+        console.log(list.indexOf('2'))
+        console.log(list.isEmpty())
+        console.log(list.toString())
+        console.log(list.size())
+        console.log(list)
+        console.log(list.get(1))
     </script>
 </body>
 </html>
