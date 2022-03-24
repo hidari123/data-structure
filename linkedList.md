@@ -12,16 +12,16 @@
     2. 无法通过下标直接访问元素
 
 ## 链表常见操作
-1. `append(element)`：向列表尾部添加一个新的项
-2. `insert(position, element)`：列表指定位置插入一个新的项
+1. `append(element)`：向链表尾部添加一个新的项
+2. `insert(position, element)`：链表指定位置插入一个新的项
 3. `get(position)`：获取对应位置的元素
 4. `indexOf(element)`：返回元素在链表中的索引，如果链表中没有该元素则返回`-1`
 5. `update(position, element)`：修改某个位置的元素
-6. `removeAt(position)`：从列表的特定位置移除一项
-7. `remove(element)`：从列表中移除一项
+6. `removeAt(position)`：从链表的特定位置移除一项
+7. `remove(element)`：从链表中移除一项
 8. `isEmpty()`：如果链表中不包含任何元素，返回`true`，如果链表长度大于`0`则返回`false`
 9. `size()`：返回链表包含的元素个数，与数组`length`属性类似
-10. `toString()`：由于列表使用了`Node`类，需要重写继承自JavaScript对象的默认`toString`方法，让其只输出元素的值
+10. `toString()`：由于链表使用了`Node`类，需要重写继承自JavaScript对象的默认`toString`方法，让其只输出元素的值
 
 ## 封装
 ```js
