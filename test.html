@@ -8,199 +8,97 @@
 </head>
 <body>
     <script>
-        class Node {
-            constructor (ele) {
-                this.prev = null
-                this.next = null
-                this.ele = ele
-            }
-        }
-        class DoublyLinkedList {
-            // 属性
+        class Set {
             constructor () {
-                this.head = null // 头指针
-                this.tail = null // 尾指针
-                this.length = 0
+                this.item = {}
             }
-            append(ele) {
-                let node = new Node(ele)
-                // 判断链表是否为空
-                if (this.head === null) {
-                    this.head = node
-                    this.tail = node
-                } else {
-                    this.tail.next = node
-                    node.prev = this.tail
-                    this.tail = node
-                }
-                this.length++
-            }
-
-            insert(position, ele) {
-                if (position < 0 || position > this.length) return false
-                let node = new Node(ele)
-                if (this.length === 0) {
-                    this.head = node
-                    this.tail = node
-                } else {
-                    if (position === 0) {
-                        this.head.prev = node
-                        node.next = this.head
-                        this.head = node
-                    } else if(position === this.length) {
-                        this.tail.next = node
-                        node.prev = this.tail
-                        this.tail = node
-                    } else {
-                        let current = this.search(position)
-                        node.next = current
-                        node.prev = current.prev
-                        current.prev.next = node
-                        current.prev = node
-                    }
-                }
-                this.length++
+            add(value) {
+                // 判断集合中是否包含该元素
+                if(this.has(value)) return false
+                this.item[value] = value
                 return true
             }
-
-            get(position) {
-                if (position < 0 || position >= this.length) return false
-                let current = this.search(position)
-                return current.ele
-            }
-
-            indexOf(ele) {
-                let current = this.head
-                let index = 0
-                while (current) {
-                    if (current.ele === ele) return index
-                    current = current.next
-                    index++
-                }
-                return -1
-            }
-
-            update(position, ele) {
-                if (position < 0 || position >= this.length) return false
-                let current = this.search(position)
-                current.ele = ele
+            remove(value) {
+                if(!this.has(value)) return false
+                delete this.item[value]
                 return true
             }
-
-            removeAt(position) {
-                if (position < 0 || position >= this.length) return null
-                let current = this.head
-                // 判断是否只有一个节点
-                if (this.length === 1) {
-                    this.head = null
-                    this.tail = null
-                } else {
-                    if (position === 0) {
-                        this.head.next.prev = null
-                        this.head = this.head.next
-                    } else if (position === this.length - 1) {
-                        current = this.tail
-                        this.tail.prev.next = null
-                        this.tail = this.tail.prev
-                    } else {
-                        current = this.search(position)
-                        current.prev.next = current.next
-                        current.next.prev = current.prev
-                    }
-                }
-                this.length--
-                // 返回删除的元素
-                return current.ele
+            clear() {
+                this.item = []
             }
-
-            remove(ele) {
-                let index = this.indexOf(ele)
-                return this.removeAt(index)
-            }
-
-            isEmpty() {
-                return this.length === 0
-            }
-
             size() {
-                return this.length
+                return Object.keys(this.item).length
+            }
+            values() {
+                return Object.keys(this.item)
+            }
+            has(value) {
+                return this.item.hasOwnProperty(value)
             }
 
-            getFirst() {
-                return this.head.ele
-            }
-
-            getTail() {
-                return this.tail.ele
-            }
-
-            toString() {
-                return this.forwardString()
-            }
-
-            forwardString() {
-                // 定义变量
-                let current = this.head
-                let resultString = ''
-
-                // 依次向后遍历，获取每一个节点
-                while (current) {
-                    resultString += current.ele + ' '
-                    current = current.next
+            // 集合间操作
+            // 并集
+            union(otherSet) {
+                let unionSet = new Set()
+                let values = this.values()
+                for (let i = 0; i < values.length; i++) {
+                    unionSet.add(values[i])
                 }
-                return resultString
+                values = otherSet.values()
+                for (let i = 0; i < values.length; i++) {
+                    if(!unionSet.has(values[i])) unionSet.add(values[i])
+                }
+                return unionSet
             }
 
-            backwardString() {
-                let current = this.tail
-                let resultString = ''
-                while (current) {
-                    resultString += current.ele + ' '
-                    current = current.prev
+            intersection(otherSet) {
+                let intersectionSet = new Set()
+                let values = this.values()
+                for (let i = 0; i < values.length; i++) {
+                    let item = values[i]
+                    if (otherSet.has(item)) intersectionSet.add(item)
                 }
-                return resultString
+                return intersectionSet
             }
 
-            search(position) {
-                let current = null
-                if (this.length / 2 > position) {
-                    current = this.head
-                    let index = 0
-                    while (index++ < position) {
-                        current = current.next
-                    }
-                } else {
-                    current = this.tail
-                    let index = this.length - 1
-                    while (index-- > position) {
-                        current = current.prev
-                    }
+            // 差集
+            difference(otherSet) {
+                let differenceSet = new Set()
+                let values = this.values()
+                for (let i = 0; i < values.length; i++) {
+                    let item = values[i]
+                    if (!otherSet.has(item)) differenceSet.add(item)
                 }
-                return current
+                return differenceSet
+            }
+
+            // 子集
+            subset(otherSet) {
+                let values = this.values()
+                for (let i = 0; i < values.length; i++) {
+                    let item = values[i]
+                    if (!otherSet.has(item)) return false
+                }
+                return true
             }
         }
+        let set = new Set()
+        set.add('abc')
+        set.add('def')
+        set.add('abc')
 
-        let list = new DoublyLinkedList()
-        list.append('123')
-        list.append('654')
-        list.append('789')
-        list.insert(3,'abc')
-        console.log(list.forwardString())
-        console.log(list.backwardString())
-        console.log(list.toString())
-        console.log(list.get(1))
-        console.log(list.indexOf('abc'))
-        list.update(3,'def')
-        console.log(list.toString())
-        let a = list.removeAt(0)
-        console.log(list.toString())
-        console.log(a)
-        list.remove('def')
-        console.log(list.toString())
-        console.log(list.isEmpty())
-        console.log(list.size())
-        console.log(list.getTail())
-        console.log(list.getFirst())
+        let otherSet = new Set()
+        otherSet.add('def')
+        otherSet.add('123')
+        set.union(otherSet)
+        console.log(set.values())
+        console.log(otherSet.values())
+        console.log(set.union(otherSet).values())
+        console.log(set.intersection(otherSet).values())
+        console.log(set.difference(otherSet).values())
+        let sub = new Set()
+        sub.add('abc')
+        console.log(sub.subset(set))
     </script>
 </body>
 </html>
