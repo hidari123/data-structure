@@ -8,97 +8,173 @@
 </head>
 <body>
     <script>
-        class Set {
+        class HashMap {
             constructor () {
-                this.item = {}
+                // 初始化用来存放数据的数组
+                this.storage = []
+                // 初始化数据数量
+                this.count = 0
+                // 初始化数组总长度
+                this.limit = 7
             }
-            add(value) {
-                // 判断集合中是否包含该元素
-                if(this.has(value)) return false
-                this.item[value] = value
-                return true
+
+            // 链地址法
+            // 哈希函数
+            // string => hashCode => 压缩到数组范围(size)内
+            hashFunc(str, size) {
+                // 1. 初始化 hashCode
+                let hashCode = 0
+                // 2. 霍纳算法计算 hashCode 的值
+                // charCodeAt() => str => Unicode 编码
+                for (let i = 0; i < str.length; i++) {
+                    hashCode = 37 * hashCode + str.charCodeAt(i)
+                }
+                // 3. 取余操作
+                let index = hashCode % size
+                return index
             }
-            remove(value) {
-                if(!this.has(value)) return false
-                delete this.item[value]
-                return true
+
+            // 插入和修改操作
+            put(key, value) {
+                // 1. 根据 key 获取相对应的 index
+                let index = this.hashFunc(key, this.limit)
+                // 2. 根据 index 取出对应的 bucket => 每个 index 的链条 => 数组
+                // 3. 判断 bucket 是否为空
+                let bucket = this.storage[index] || []
+                this.storage[index] = bucket
+                // 4. 是否是修改数据
+                for (let i = 0; i < bucket.length; i++) {
+                    let tuple = bucket[i]
+                    if (tuple[0] === key) {
+                        tuple[1] = value
+                        return true
+                    }
+                }
+                // 添加操作
+                bucket.push([key, value])
+                this.count++
+                // 判断是否需要扩容
+                let newLimit = this.limit * 2
+                let newPrime = this.getPrime(newLimit)
+                if (this.count > this.limit * 0.75) this.resize(newPrime)
             }
-            clear() {
-                this.item = []
+
+            // 获取元素
+            get(key) {
+                // 1. 根据 key 获取相对应的 index
+                let index = this.hashFunc(key, this.limit)
+                // 2. 根据 index 取出对应的 bucket => 每个 index 的链条 => 数组
+                let bucket = this.storage[index]
+                // 3. 判断 bucket 是否为空
+                if (bucket === undefined) return null
+                // 4. 有 bucket 线性查找
+                for (let i = 0; i < bucket.length; i++) {
+                    let tuple = bucket[i]
+                    if (tuple[0] === key) {
+                        return tuple[1]
+                    }
+                }
+                // 5. 依然没有找到 返回 null
+                return null
             }
+
+            // 删除元素
+            remove(key) {
+                // 1. 根据 key 获取相对应的 index
+                let index = this.hashFunc(key, this.limit)
+                // 2. 根据 index 取出对应的 bucket => 每个 index 的链条 => 数组
+                let bucket = this.storage[index]
+                // 3. 判断 bucket 是否为空
+                if (bucket === undefined) return null
+                // 4. 有 bucket 删除
+                for (let i = 0; i < bucket.length; i++) {
+                    let tuple = bucket[i]
+                    if (tuple[0] === key) {
+                        bucket.splice(i, 1)
+                        this.count--
+
+                        // 缩小容量
+                        let newLimit = Math.floor(this.limit / 2)
+                        let newPrime = this.getPrime(newLimit)
+                        if (this.limit > 7 && this.count < this.limit * 0.25) {
+                            this.resize(Math.floor(newPrime)) > 7 ? this.resize(Math.floor(newPrime)) : this.resize(Math.floor(7))
+                        }
+                        return tuple[1]
+                    }
+                }
+                // 5. 依然没有找到 返回 null
+                return null
+            }
+
+            // 判断哈希表是否为 null
+            isEmpty() {
+                return this.count === 0
+            }
+
+            // 获取哈希表中元素的个数
             size() {
-                return Object.keys(this.item).length
-            }
-            values() {
-                return Object.keys(this.item)
-            }
-            has(value) {
-                return this.item.hasOwnProperty(value)
+                return this.count
             }
 
-            // 集合间操作
-            // 并集
-            union(otherSet) {
-                let unionSet = new Set()
-                let values = this.values()
-                for (let i = 0; i < values.length; i++) {
-                    unionSet.add(values[i])
+            // 哈希表改变大小
+            resize(newLimit) {
+                // 1. 保存旧的数组内容
+                let oldStorage = this.storage
+                // 2. 重置所有的属性
+                this.storage = []
+                this.count = 0
+                this.limit = newLimit
+                // 3. 遍历 oldStorage 中所有的 bucket
+                for (let i = 0; i < oldStorage.length; i++){
+                    // 3.1 取出对应的 bucket
+                    let bucket = oldStorage[i]
+                    // 3.2 判断 bucket 是否为 undefined
+                    if (bucket === undefined) continue
+                    // 3.3 bucket 有数据 取出数据 重新插入
+                    for (let i = 0; i < bucket.length; i++){
+                        let tuple = bucket[i]
+                        this.put(tuple[0], tuple[1])
+                    }
                 }
-                values = otherSet.values()
-                for (let i = 0; i < values.length; i++) {
-                    if(!unionSet.has(values[i])) unionSet.add(values[i])
-                }
-                return unionSet
             }
 
-            intersection(otherSet) {
-                let intersectionSet = new Set()
-                let values = this.values()
-                for (let i = 0; i < values.length; i++) {
-                    let item = values[i]
-                    if (otherSet.has(item)) intersectionSet.add(item)
-                }
-                return intersectionSet
-            }
-
-            // 差集
-            difference(otherSet) {
-                let differenceSet = new Set()
-                let values = this.values()
-                for (let i = 0; i < values.length; i++) {
-                    let item = values[i]
-                    if (!otherSet.has(item)) differenceSet.add(item)
-                }
-                return differenceSet
-            }
-
-            // 子集
-            subset(otherSet) {
-                let values = this.values()
-                for (let i = 0; i < values.length; i++) {
-                    let item = values[i]
-                    if (!otherSet.has(item)) return false
+            // 判断某个数是否是质数
+            // 一个数若可以进行因数分解，那么分解时得到的两个数一定是一个小于等于sqrt(n)，一个大于等于sqrt(n)
+            isPrime(num) {
+                // 获取 num 平方根
+                let temp = parseInt(Math.sqrt(num))
+                // 循环判断
+                for (let i = 2; i <= temp; i++) {
+                    if (num % i === 0) return false
                 }
                 return true
+            }
+
+            // 获取质数的方法
+            getPrime(num) {
+                while (!this.isPrime(num)) {
+                    num++
+                }
+                return num
             }
         }
-        let set = new Set()
-        set.add('abc')
-        set.add('def')
-        set.add('abc')
-
-        let otherSet = new Set()
-        otherSet.add('def')
-        otherSet.add('123')
-        set.union(otherSet)
-        console.log(set.values())
-        console.log(otherSet.values())
-        console.log(set.union(otherSet).values())
-        console.log(set.intersection(otherSet).values())
-        console.log(set.difference(otherSet).values())
-        let sub = new Set()
-        sub.add('abc')
-        console.log(sub.subset(set))
+        let test = new HashMap()
+        test.put('age',18)
+        test.put('name', 'hidari')
+        test.put('sex', 'woman')
+        test.put('age', 20)
+        test.put('aaa', 'a')
+        test.put('bbb', 'b')
+        test.put('ccc', 'c')
+        test.put('ddd', 'd')
+        console.log(test)
+        console.log(test.get('123'))
+        test.remove('age')
+        test.remove('aaa')
+        test.remove('bbb')
+        test.remove('ccc')
+        test.remove('ddd')
+        console.log(test)
     </script>
 </body>
 </html>
