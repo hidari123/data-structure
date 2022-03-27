@@ -74,3 +74,36 @@
 ![avatar](https://img-blog.csdnimg.cn/20190925005718156.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4YzQ3,size_16,color_FFFFFF,t_70)
  - 链表存储：除了完全二叉树、平衡二叉树或者满二叉树，其他的一般都用链式存储结构。
 ![avatar](https://img-blog.csdnimg.cn/20190925013545464.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4YzQ3,size_16,color_FFFFFF,t_70)
+
+## 二叉树的遍历
+![avatar](https://img-blog.csdnimg.cn/20190925014359921.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4YzQ3,size_16,color_FFFFFF,t_70)
+1. 前序遍历
+![avatar](https://img-blog.csdnimg.cn/20190925014702685.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4YzQ3,size_16,color_FFFFFF,t_70)
+    1. 前序遍历DLR，D-->根结点，L-->根的左子树的结点,R-->根的右子树的结点
+    2. 从根结点开始，每个结点都按DLR的顺序进行判断。
+2. 中序遍历
+![avatar](https://img-blog.csdnimg.cn/20190925015227555.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4YzQ3,size_16,color_FFFFFF,t_70)
+   1. 中序遍历LDR，L-->根的左子树的结点,D-->根结点，R-->根的右子树的结点
+   2. 从根结点开始，每个结点都按LDR的顺序进行判断。 
+   3. 如图中的树，如果A在中序遍历的最前面，说明此树无左子树
+   4. 如果A在中序遍历的最后面，说明此树无右子树
+3. 后序遍历
+![avatar](https://img-blog.csdnimg.cn/20190925015529760.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4YzQ3,size_16,color_FFFFFF,t_70)
+    1. 后序遍历LRD，L-->根的左子树的结点,R-->根的右子树的结点，D-->根结点
+    2. 从根结点开始，每个结点都按LRD的顺序进行判断。
+4. 层序遍历：逐层从左到右遍历
+![avatar](https://img-blog.csdnimg.cn/20190925020013620.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2p4YzQ3,size_16,color_FFFFFF,t_70)
+5. 深度优先和广度优先
+    1. 深优一般基于栈实现，广优一般基于队列实现 
+    2. 前序和后序推不出一颗唯一的二叉树。
+6. 栈实现中序遍历： 
+    1. 从根结点开始，把根结点的左孩子和该孩子的左孩子（一直是左孩子）.......
+       （最左边的一排）全部进栈，一直到左边树没有下一个结点为止。 
+    2. 开始出栈，如果栈顶结点没有左，没有右，出栈它自己。
+       否则先出栈它自己，然后把它右孩子和该右孩子的所有左边进栈。然后再出栈。 
+    3. 出栈的顺序就是遍历的顺序
+7. 队列实现层序遍历：
+   1. 根结点开始进队列
+   2. 根结点出队，把根结点的左右孩子进队，再出队
+   3. 其他结点一样，把该结点的左右孩子进队，再出队
+   4. 队列出队的顺序就是层序遍历的顺序
