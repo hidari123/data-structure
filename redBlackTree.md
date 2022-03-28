@@ -58,3 +58,53 @@
        - 对x进行右旋，意味着，将“x的左孩子”设为“x的父亲节点”；即，将 x变成了一个右节点(x成了为y的右孩子)！因此，右旋中的“**右**”，意味着“**被旋转的节点将变成一个右节点**”。
 
 ## 操作
+### 插入
+1. 要插入的节点 => N，父节点 => P，祖父节点 => G，父亲的兄弟节点 =>U
+2. 情况1：
+   1. 新节点N位于根节点上，没有父节点
+   2. 直接将红色变成黑色
+3. 情况2：
+   1. 新节点P是黑色
+   2. 性质4没有失效（新节点是红色），性质5也没有问题
+   3. 尽管新节点有两个黑色的叶子节点NIL，但是新节点N是红色的，所以通过他的路径中黑色节点个数依然相同，满足性质5
+4. （下面三种情况(Case)处理问题的核心思路都是：**将红色的节点移到根节点；然后，将根节点设为黑色**。下面对它们详细进行介绍。 ）
+   1. 情况3：
+      - ![avatar](https://images0.cnblogs.com/i/497634/201403/251759273578917.jpg)
+      - P为红色，U也是红色
+      - 操作方案：
+        - (01) 将“父节点”设为黑色。
+        - (02) 将“叔叔节点”设为黑色。
+        - (03) 将“祖父节点”设为“红色”。
+        - (04) 将“祖父节点”设为“当前节点”(红色节点)；即，之后继续对“当前节点”进行操作。
+          - 现在新节点N有了一个黑色的父节点P，所以每条路径上黑色节点数目没有改变
+          - 从而在更高的路径上，必然都会经过G节点，所以那些路径的黑色节点数目也是不变的，符合性质5
+        - 可能出现的问题：
+          - N的祖父节点G也可能是红色，违反性质3，可以递归调整颜色
+          - 递归调整颜色到了根节点，需要进行旋转
+   2. 情况4：
+      - ![avatar](https://images0.cnblogs.com/i/497634/201404/170945094945387.jpg)
+      - N的叔叔U是黑色节点，且当前节点N是左孩子
+      - 操作方案：
+        - (01) 将“父节点”设为“黑色”。
+        - (02) 将“祖父节点”设为“红色”。
+        - (03) 以“祖父节点”为支点进行右旋。
+          - 对祖父节点G进行依次右旋转
+          - 在旋转查收的树中，以前的父节点P现在是新节点以及以前的祖父节点G的父节点
+          - 交换以前的父节点P和祖父节点G的颜色（P => 黑色，G => 红色，G原来一定是黑色）
+          - N的兄弟节点B向右平移，成为G节点的左子节点
+   3. 情况5：
+      - ![avatar](https://images0.cnblogs.com/i/497634/201403/251801031546918.jpg)
+      - N的叔叔U是黑色节点，且当前节点N是右孩子
+      - 操作方案：
+        - 对P节点进行依次左旋转，形成情况4的结果
+        - 对父节点G进行依次右旋转，并改变颜色
+
+## 案例
+![avatar](https://upload-images.jianshu.io/upload_images/1102036-d791cd8b5c6066d7.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp)
+![avatar](https://upload-images.jianshu.io/upload_images/1102036-5163c2303984aca3.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp)
+![avatar](https://upload-images.jianshu.io/upload_images/1102036-cf9e6b85213d5c52.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp)
+![avatar](https://upload-images.jianshu.io/upload_images/1102036-d763141e7a188d48.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp)
+![avatar](https://upload-images.jianshu.io/upload_images/1102036-c621cc745ec51e4d.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp)
+![avatar](https://upload-images.jianshu.io/upload_images/1102036-cf78539acf806248.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp)
+![avatar](https://upload-images.jianshu.io/upload_images/1102036-88877b186cc160bd.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp)
+![avatar](https://upload-images.jianshu.io/upload_images/1102036-daec955db3e90471.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp)
