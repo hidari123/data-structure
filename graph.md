@@ -58,4 +58,28 @@
       - 邻接表如果需要计算有向图的"入度"，那么是一件非常麻烦的事情
       - 它必须构造一个"逆邻接表"，才能有效的计算"入度"，而邻接矩阵会非常简单
 
+
+## 图的遍历
+1. 图的遍历思想
+   - 图的遍历算法的思想在于必须访问每个第一次访问的节点，并且追踪有哪些顶点还没有被访问到
+2. 有两种算法可以对图进行遍历
+   1. 广度优先搜索(Breadth-First Search, 简称BFS)
+      - ![avatar](https://upload-images.jianshu.io/upload_images/1102036-97199fd04e5c6515?imageMogr2/auto-orient/strip|imageView2/2/w/1024/format/webp)
+   2. 深度优先搜索(Depth-First Search, 简称DFS)
+      - ![avatar](https://upload-images.jianshu.io/upload_images/1102036-1c873ab8dad0805e?imageMogr2/auto-orient/strip|imageView2/2/w/1024/format/webp)
+      - 两种遍历算法, 都需要明确指定第一个被访问的顶点
+3. 遍历的注意点：
+   - 完全探索一个顶点要求我们便查看该顶点的每一条边
+   - 对于每一条所连接的没有被访问过的顶点，将其标注为被发现的，并将其加进待访问顶点列表中
+   - 为了保证算法的效率：每个顶点至多访问两次
+4. 两种算法的思想：
+   1. BFS: 基于队列，入队列的顶点先被探索
+   2. DFS: 基于栈，通过将顶点存入栈中，顶点是沿着路径被探索的，存在新的相邻顶点就去访问
+5. 为了记录顶点是否被访问过，我们使用三种颜色来反应它们的状态：(或者两种颜色也可以)
+   1. 白色: 表示该顶点还没有被访问
+   2. 灰色: 表示该顶点被访问过，但并未被探索过
+   3. 黑色: 表示该顶点被访问过且被完全探索过
+
 ## 封装
+- 添加测试代码效果图
+- ![avatar](https://upload-images.jianshu.io/upload_images/1102036-38c900671fd33dc7?imageMogr2/auto-orient/strip|imageView2/2/w/1024/format/webp)
