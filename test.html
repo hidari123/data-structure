@@ -8,6 +8,54 @@
 </head>
 <body>
     <script>
+        // 封装一个 arrayList
+        class ArrayList {
+            constructor () {
+                this.array = []
+            }
+
+            insert(item) {
+                this.array.push(item)
+            }
+
+            toString() {
+                return this.array.join(' ')
+            }
+        }
+
+        class BubbleSortList extends ArrayList {
+            constructor () {
+                super()
+            }
+
+            bubbleSort() {
+                // 反向循环, 因此次数越来越少
+                for (let count = this.array.length; count >= 0; count--) {
+                    // 根据i的次数, 比较循环到i位置
+                    for (let i = 0; i < this.array.length; i++) {
+                        if (this.array[i] > this.array[i+1]) {
+                            // 解构交换位置
+                            [this.array[i], this.array[i+1]] = [this.array[i+1], this.array[i]]
+                        }
+                    }
+                }
+            }
+        }
+
+        // 初始化数据项
+        let list = new BubbleSortList()
+
+        list.insert(3)
+        list.insert(6)
+        list.insert(4)
+        list.insert(2)
+        list.insert(11)
+        list.insert(10)
+        list.insert(5)
+
+        console.log(list.toString())
+        list.bubbleSort()
+        console.log(list.toString())
     </script>
 </body>
 </html>
