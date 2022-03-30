@@ -316,3 +316,11 @@ console.log(graph.toString())
 console.log(graph.bfs(graph.vertexes[0]))
 console.log(graph.dfs(graph.vertexes[0]))
 ```
+- 代码解析:
+  - 代码序号1: 初始化颜色.和广度优先搜索算法一样.
+  - 代码序号2: 遍历所有的顶点, 每遍历一个顶点, 让其执行递归函数. 
+    - 递归代码1: 探测了u顶点, 所有u顶点的颜色设置为灰色.
+    - 递归代码2: 访问u顶点, 通过回调函数传入u.
+    - 递归代码3: 访问u顶点的相连的顶点, 在访问的过程中判断该顶点如果为白色, 说明未探测, 调用递归方法.
+    - 递归代码4: u被探测过, 也被访问过, 将u的颜色设置为黑色.
+    - ![avatar](https://upload-images.jianshu.io/upload_images/1102036-a1c010fe114de198?imageMogr2/auto-orient/strip|imageView2/2/w/700/format/webp)
