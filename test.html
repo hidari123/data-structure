@@ -23,19 +23,18 @@
             }
         }
 
-        class BubbleSortList extends ArrayList {
+        class SelectionSort extends ArrayList {
             constructor () {
                 super()
             }
-
-            bubbleSort() {
-                // 反向循环, 因此次数越来越少
-                for (let count = this.array.length; count >= 0; count--) {
-                    // 根据i的次数, 比较循环到i位置
-                    for (let i = 0; i < this.array.length; i++) {
-                        if (this.array[i] > this.array[i+1]) {
-                            // 解构交换位置
-                            [this.array[i], this.array[i+1]] = [this.array[i+1], this.array[i]]
+            // 从大到小
+            selectionSort() {
+                // 外层循环: 从第一个位置开始取出数据, 直到倒数第二个
+                for (let min = 0; min < this.array.length-1; min++) {
+                    // 内层循环: 从 min+1 位置开始, 和后面的内容比较
+                    for (let i = min+1; i < this.array.length; i++) {
+                        if (this.array[i] > this.array[min]) {
+                            [this.array[i], this.array[min]] = [this.array[min], this.array[i]]
                         }
                     }
                 }
@@ -43,7 +42,7 @@
         }
 
         // 初始化数据项
-        let list = new BubbleSortList()
+        let list = new SelectionSort()
 
         list.insert(3)
         list.insert(6)
@@ -54,7 +53,7 @@
         list.insert(5)
 
         console.log(list.toString())
-        list.bubbleSort()
+        list.selectionSort()
         console.log(list.toString())
     </script>
 </body>
