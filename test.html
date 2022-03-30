@@ -23,38 +23,69 @@
             }
         }
 
-        class shellSortList extends ArrayList {
+        class quickSortList extends ArrayList {
             constructor () {
                 super()
             }
-            shellSort() {
-                // 1.获取数组的长度
-                let length = this.array.length
-                // 2.根据长度计算增量
-                let gap = Math.floor(length / 2)
-                // 3.增量不断变量小, 大于0就继续排序
-                while (gap >= 1) {
-                    // 4.实现插入排序
-                    for (let i = gap; i < length; i++) {
-                        // 4.1.保存临时变量
-                        let temp = this.array[i]
-                        let j = i
-                        // 4.2.插入排序的内层循环
-                        while (this.array[j-gap] > temp && j > gap - 1) {
-                            this.array[j] = this.array[j-gap]
-                            j -= gap
-                        }
-                        // 4.3.将选出的j位置设置为temp
-                        this.array[j] = temp
+            quickSort() {
+                this.quickSortRec(0, this.array.length - 1)
+            }
+
+            // 内部递归
+            quickSortRec(left, right) {
+                // 0.递归结束条件
+                if (left >= right) return
+                // 1.获取枢纽
+                let pivot = this.median(left, right)
+
+                // 2.开始进行交换
+                // 2.1.记录左边开始位置和右边开始位置
+                let leftPointer = left
+                let rightPointer = right - 1
+                // 2.2.循环查找位置
+                while (true) {
+                    while (this.array[++leftPointer] < pivot) {}
+                    while (this.array[--rightPointer] > pivot) {}
+                    if (leftPointer < rightPointer) {
+                        // 2.3.交换两个数值
+                        [this.array[leftPointer], this.array[rightPointer]] = [this.array[rightPointer], this.array[leftPointer]]
+                    } else {
+                        // 2.4.当 leftPointer < rightPointer 的时候(一定不会=, 看下面解释中的序号3), 停止循环因为两边已经找到了相同的位置
+                        break
                     }
-                    // 5.重新计算新的间隔
-                    gap = Math.floor(gap / 2)
                 }
+                // 3.将枢纽放在正确的位置
+                [this.array[leftPointer], this.array[right - 1]] = [this.array[right - 1], this.array[leftPointer]]
+                // 4.递归调用左边
+                this.quickSortRec(left, leftPointer - 1)
+                this.quickSortRec(leftPointer + 1, right)
+            }
+
+            // 选择枢纽
+            median(left, right) {
+                // 1.求出中间的位置
+                let middle = Math.floor((left + right) / 2)
+                // 2.判断并且进行交换
+                if (this.array[left] > this.array[right]) {
+                    [this.array[left], this.array[right]] = [this.array[right], this.array[left]]
+                }
+                // 是独立的判断，每个都要经过，所以不能写 else if
+                if (this.array[middle] > this.array[right]) {
+                    [this.array[middle], this.array[right]] = [this.array[right], this.array[middle]]
+                }
+                if (this.array[left] > this.array[middle]) {
+                    [this.array[middle], this.array[left]] = [this.array[left], this.array[middle]]
+                }
+
+                // 3.巧妙的操作: 将center移动到right - 1的位置
+                [this.array[middle], this.array[right - 1]] = [this.array[right - 1], this.array[middle]]
+                // 4.返回pivot
+                return this.array[right - 1]
             }
         }
 
         // 初始化数据项
-        let list = new shellSortList()
+        let list = new quickSortList()
 
         list.insert(3)
         list.insert(6)
@@ -65,7 +96,7 @@
         list.insert(5)
 
         console.log(list.toString())
-        list.shellSort()
+        list.quickSort()
         console.log(list.toString())
     </script>
 </body>
